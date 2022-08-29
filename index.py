@@ -13,6 +13,10 @@ import ctypes
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
+if not os.path.exists('./config.save'):
+    f = open('./config.save', 'w')
+    f.close()
+
 path = open('./config.save', 'r').readline()
 
 root = Tk()
