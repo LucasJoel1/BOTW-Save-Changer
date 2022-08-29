@@ -10,6 +10,8 @@ from tkinter import filedialog
 from tkinter.simpledialog import askstring
 import ctypes
 
+os.system('git pull')
+
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
