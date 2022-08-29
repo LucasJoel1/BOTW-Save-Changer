@@ -17,4 +17,4 @@ mkdir backups
 ```
 
 ## create a desktop shortcut to the program and if you would like a shortcut to the program in the start menu which can be found in the folder
-`C:/Users/<username>/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup`
+`C:/Users/<username>/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/`
