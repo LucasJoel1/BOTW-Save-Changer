@@ -162,13 +162,6 @@ def IMPORT_SAVE():
         return
     success_message("Save not imported")
 
-if not path + "\\mlc01\\usr\\save\\00050000\\101c9400\\user\\80000001\\save.save":
-    error_message("No save found")
-    save_name = simpledialog.askstring("Create Save", "Enter save name:")
-    if not save_name:
-        error_message("No save name entered")
-        exit()
-
 if path == "" or not os.path.isdir(path):
     success_message("No cemu path found in config.save, please enter your cemu path")
     path = filedialog.askdirectory(initialdir='./saves')
