@@ -216,7 +216,6 @@ ttk.Button(tab_load_save, text="Load Save", command=lambda: LOAD_SAVE()).pack(pa
 tab_label_duplicate_save = ttk.Label(tab_duplicate_save, text="Duplicate Save", font=("Arial", 16))
 tab_label_duplicate_save.pack(pady=10)
 duplicate_name_entry = ttk.Entry(tab_duplicate_save, width=50)
-duplicate_name_entry.insert(0, "Duplicate Save Name")
 duplicate_name_entry.pack(pady=10)
 ttk.Button(tab_duplicate_save, text="Duplicate Save", command=lambda: DUPLICATE_SAVE(str(duplicate_name_entry.get()))).pack(pady=10)
 
@@ -229,7 +228,6 @@ ttk.Button(tab_delete_save, text="Delete Save", command=lambda: DELETE_SAVE()).p
 tab_label_change_save_name = ttk.Label(tab_change_save_name, text="Change Save Name", font=("Arial", 16))
 tab_label_change_save_name.pack(pady=10)
 save_name_entry = ttk.Entry(tab_change_save_name, width=50)
-save_name_entry.insert(0, "Save Name")
 save_name_entry.pack(pady=10)
 ttk.Button(tab_change_save_name, text="Change Save Name", command=lambda: CHANGE_SAVE_NAME(str(save_name_entry.get()))).pack(pady=10)
 
@@ -237,7 +235,6 @@ ttk.Button(tab_change_save_name, text="Change Save Name", command=lambda: CHANGE
 tab_label_backup_save = ttk.Label(tab_backup_save, text="Backup Save", font=("Arial", 16))
 tab_label_backup_save.pack(pady=10)
 backup_name_entry = ttk.Entry(tab_backup_save, width=50)
-backup_name_entry.insert(0, "Backup Save Name")
 backup_name_entry.pack(pady=10)
 ttk.Button(tab_backup_save, text="Backup Save", command=lambda: BACKUP_SAVE(str(backup_name_entry.get()))).pack(pady=10)
 
