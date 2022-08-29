@@ -204,7 +204,6 @@ tabControl.pack(expand=1, fill="both")
 tab_label_creat_save = ttk.Label(tab_creat_save, text="Create Save", font=("Arial", 16))
 tab_label_creat_save.pack(pady=10)
 save_name_entry = ttk.Entry(tab_creat_save, width=50)
-save_name_entry.insert(0, "Save Name")
 save_name_entry.pack(pady=10)
 ttk.Button(tab_creat_save, text="Create Save", command=lambda: CREATE_SAVE(str(save_name_entry.get()))).pack(pady=10)
 
