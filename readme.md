@@ -4,6 +4,7 @@
 <br>
 
 # BOTW Save Changer and Importer/Exporter
+<<<<<<< HEAD
 
 ## Use these commands in the cmd to install and make sure you have python 3 installed
 
@@ -22,3 +23,6 @@ mkdir backups
 ## How to update the program
 
 The program is updated automatically when you run the program.
+=======
+Install the application using the install script in the releases
+>>>>>>> parent of 14a2854 (modified:   readme.md)
