@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
+from tkinter import simpledialog
 from tkinter.simpledialog import askstring
 import ctypes
 
@@ -15,9 +16,7 @@ os.system('git pull')
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-if not os.path.exists('./config.save'):
-    f = open('./config.save', 'w')
-    f.close()
+# use bootstrap to make the gui look pretty
 
 path = open('./config.save', 'r').readline()
 
@@ -26,6 +25,8 @@ root.title("BOTW Save Changer and Exporter for Cemu")
 root.iconbitmap('./assets/logo.ico')
 root.geometry("686x500")
 root.resizable(False, True)
+# dark mode
+root.style = ttk.Style()
 
 def error_message(message):
     messagebox.showerror("Error", message)
@@ -160,6 +161,13 @@ def IMPORT_SAVE():
         success_message("Save imported")
         return
     success_message("Save not imported")
+
+if not path + "\\mlc01\\usr\\save\\00050000\\101c9400\\user\\80000001\\save.save":
+    error_message("No save found")
+    save_name = simpledialog.askstring("Create Save", "Enter save name:")
+    if not save_name:
+        error_message("No save name entered")
+        exit()
 
 if path == "" or not os.path.isdir(path):
     success_message("No cemu path found in config.save, please enter your cemu path")
