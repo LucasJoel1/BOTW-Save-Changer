@@ -4,3 +4,4 @@
 <br>
 
 # BOTW Save Changer and Importer/Exporter
+Install the application using the install script in the releases
