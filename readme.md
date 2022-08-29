@@ -16,7 +16,11 @@ mkdir saves
 mkdir backups
 ```
 
-## Create a desktop shortcut to the program and if you would like a shortcut to the program in the start menu which can be found in the folder
+## How to make a shortcut to the program
+
+copy the pre-existing shortcut to the desktop and if you would like the start menu in which the path to the start menu directory is located below
+
+
 `C:/Users/<username>/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/`
 
 ## How to update the program
