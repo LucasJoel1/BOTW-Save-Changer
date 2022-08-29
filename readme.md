@@ -4,4 +4,17 @@
 <br>
 
 # BOTW Save Changer and Importer/Exporter
-Install the application using the install script in the releases
+
+## Use these commands in the cmd to install and make sure you have python 3 installed
+
+```
+pip install winshell
+cd <install directory>
+git clone https://github.com/LucasJoel1/BOTW-Save-Changer.git
+cd BOTW-Save-Changer
+mkdir saves
+mkdir backups
+```
+
+## create a desktop shortcut to the program and if you would like a shortcut to the program in the start menu which can be found in the folder
+`C:/Users/<username>/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup`
