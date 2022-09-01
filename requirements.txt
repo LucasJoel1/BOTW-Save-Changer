@@ -1,2 +1,7 @@
-winshell
-from win32com.shell import shell, shellcon
+tkinter
+shutil
+math
+ttkthemes
+PIL
+ctypes
+webbrowser

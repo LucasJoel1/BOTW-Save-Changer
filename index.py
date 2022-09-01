@@ -2,30 +2,31 @@ from math import frexp
 import os
 from select import select
 import shutil
+from tkinter import font
 from xml.etree.ElementInclude import include
+import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import simpledialog
 from tkinter.simpledialog import askstring
+from ttkthemes import ThemedTk
+from PIL import ImageTk, Image
 import ctypes
+import webbrowser
 
 os.system('git pull')
-
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-# use bootstrap to make the gui look pretty
-
 path = open('./config.save', 'r').readline()
 
-root = Tk()
+root = ThemedTk(theme="equilux")
 root.title("BOTW Save Changer and Exporter for Cemu")
 root.iconbitmap('./assets/logo.ico')
-root.geometry("686x500")
+root.geometry("785x450")
 root.resizable(False, True)
-# dark mode
 root.style = ttk.Style()
 
 def error_message(message):
@@ -34,7 +35,11 @@ def error_message(message):
 def success_message(message):
     messagebox.showinfo("Success", message)
 
-def CREATE_SAVE(save_name):
+def callback(url):
+    webbrowser.open_new(url)
+
+def CREATE_SAVE():
+    save_name = askstring("Create Save", "Enter a name for the save")
     if os.path.exists('./saves/' + save_name):
         error_message("Save already exists")
         return
@@ -66,7 +71,8 @@ def LOAD_SAVE():
     f.close()
     success_message("Save " + save_name + " loaded")
 
-def DUPLICATE_SAVE(duplicate_name):
+def DUPLICATE_SAVE():
+    duplicate_name = askstring("Duplicate Save", "Enter a name for the duplicate save")
     save = filedialog.askdirectory(initialdir='./saves')
     if not save + '/save.save':
         error_message("Invalid save, no save.save file found")
@@ -82,7 +88,6 @@ def DELETE_SAVE():
     if not save + '/save.save':
         error_message("Invalid save, no save.save file found")
         return
-    # confirm delete
     save_name = open(save + '/save.save', 'r').readline()
     if messagebox.askokcancel("Delete Save", "Are you sure you want to delete " + save_name + "?"):
         shutil.rmtree(save)
@@ -90,7 +95,8 @@ def DELETE_SAVE():
         return
     success_message("Save not deleted")
 
-def CHANGE_SAVE_NAME(save_name):
+def CHANGE_SAVE_NAME():
+    new_name = askstring("Change Save Name", "Enter a new name for the save")
     save = filedialog.askdirectory(initialdir='./saves')
     if not save + '/save.save':
         error_message("Invalid save, no save.save file found")
@@ -99,12 +105,13 @@ def CHANGE_SAVE_NAME(save_name):
     old_name = f.readline()
     f.close()
     f = open(save + '/save.save', 'w')
-    f.write(save_name)
+    f.write(new_name)
     f.close()
-    shutil.move(save, './saves/' + save_name)
-    success_message("Save name changed from " + old_name + " to " + save_name)
+    shutil.move(save, './saves/' + new_name)
+    success_message("Save name changed from " + old_name + " to " + new_name)
 
-def BACKUP_SAVE(backup_name):
+def BACKUP_SAVE():
+    backup_name = askstring("Backup Save", "Enter a name for the backup save")
     save = filedialog.askdirectory(initialdir='./saves')
     if not save + '/save.save':
         error_message("Invalid save, no save.save file found")
@@ -171,9 +178,11 @@ if path == "" or not os.path.isdir(path):
     f = open('./config.save', 'w')
     f.write(path)
     f.close()
-    
+
+logo = ImageTk.PhotoImage(Image.open("./assets/logo.ico"))
+
 tabControl = ttk.Notebook(root)
-tab_creat_save = ttk.Frame(tabControl)
+tab_create_save = ttk.Frame(tabControl)
 tab_load_save = ttk.Frame(tabControl)
 tab_duplicate_save = ttk.Frame(tabControl)
 tab_delete_save = ttk.Frame(tabControl)
@@ -182,7 +191,8 @@ tab_backup_save = ttk.Frame(tabControl)
 tab_restore_save = ttk.Frame(tabControl)
 tab_export_save = ttk.Frame(tabControl)
 tab_import_save = ttk.Frame(tabControl)
-tabControl.add(tab_creat_save, text="Create Save")
+tab_about = ttk.Frame(tabControl)
+tabControl.add(tab_create_save, text="Create Save")
 tabControl.add(tab_load_save, text="Load Save")
 tabControl.add(tab_duplicate_save, text="Duplicate Save")
 tabControl.add(tab_delete_save, text="Delete Save")
@@ -191,62 +201,80 @@ tabControl.add(tab_backup_save, text="Backup Save")
 tabControl.add(tab_restore_save, text="Restore Save")
 tabControl.add(tab_export_save, text="Export Save")
 tabControl.add(tab_import_save, text="Import Save")
+tabControl.add(tab_about, text="About")
 tabControl.pack(expand=1, fill="both")
 
 # Create Save Tab
-tab_label_creat_save = ttk.Label(tab_creat_save, text="Create Save", font=("Arial", 16))
-tab_label_creat_save.pack(pady=10)
-save_name_entry = ttk.Entry(tab_creat_save, width=50)
-save_name_entry.pack(pady=10)
-ttk.Button(tab_creat_save, text="Create Save", command=lambda: CREATE_SAVE(str(save_name_entry.get()))).pack(pady=10)
+tab_label_create_save = ttk.Label(tab_create_save, text="Create Save", font=("Arial", 16))
+tab_label_create_save.pack(pady=10)
+ttk.Button(tab_create_save, text="Create Save", command=lambda: CREATE_SAVE().pack(pady=10)).pack(pady=10)
+logo_label = ttk.Label(tab_create_save, image=logo)
+logo_label.pack(pady=10)
+
 
 # Load Save Tab
 tab_label_load_save = ttk.Label(tab_load_save, text="Load Save", font=("Arial", 16))
 tab_label_load_save.pack(pady=10)
 ttk.Button(tab_load_save, text="Load Save", command=lambda: LOAD_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_load_save, image=logo)
+logo_label.pack(pady=10)
 
 # Duplicate Save Tab
 tab_label_duplicate_save = ttk.Label(tab_duplicate_save, text="Duplicate Save", font=("Arial", 16))
 tab_label_duplicate_save.pack(pady=10)
-duplicate_name_entry = ttk.Entry(tab_duplicate_save, width=50)
-duplicate_name_entry.insert(0, "Duplicate Save Name")
-duplicate_name_entry.pack(pady=10)
-ttk.Button(tab_duplicate_save, text="Duplicate Save", command=lambda: DUPLICATE_SAVE(str(duplicate_name_entry.get()))).pack(pady=10)
+ttk.Button(tab_duplicate_save, text="Duplicate Save", command=lambda: DUPLICATE_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_duplicate_save, image=logo)
+logo_label.pack(pady=10)
 
 # Delete Save Tab
 tab_label_delete_save = ttk.Label(tab_delete_save, text="Delete Save", font=("Arial", 16))
 tab_label_delete_save.pack(pady=10)
 ttk.Button(tab_delete_save, text="Delete Save", command=lambda: DELETE_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_delete_save, image=logo)
+logo_label.pack(pady=10)
 
 # Change Save Name Tab
 tab_label_change_save_name = ttk.Label(tab_change_save_name, text="Change Save Name", font=("Arial", 16))
 tab_label_change_save_name.pack(pady=10)
-save_name_entry = ttk.Entry(tab_change_save_name, width=50)
-save_name_entry.insert(0, "Save Name")
-save_name_entry.pack(pady=10)
-ttk.Button(tab_change_save_name, text="Change Save Name", command=lambda: CHANGE_SAVE_NAME(str(save_name_entry.get()))).pack(pady=10)
+ttk.Button(tab_change_save_name, text="Change Save Name", command=lambda: CHANGE_SAVE_NAME()).pack(pady=10)
+logo_label = ttk.Label(tab_change_save_name, image=logo)
+logo_label.pack(pady=10)
 
 # Backup Save Tab
 tab_label_backup_save = ttk.Label(tab_backup_save, text="Backup Save", font=("Arial", 16))
 tab_label_backup_save.pack(pady=10)
-backup_name_entry = ttk.Entry(tab_backup_save, width=50)
-backup_name_entry.insert(0, "Backup Save Name")
-backup_name_entry.pack(pady=10)
-ttk.Button(tab_backup_save, text="Backup Save", command=lambda: BACKUP_SAVE(str(backup_name_entry.get()))).pack(pady=10)
+ttk.Button(tab_backup_save, text="Backup Save", command=lambda: BACKUP_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_backup_save, image=logo)
+logo_label.pack(pady=10)
 
 # Restore Save Tab
 tab_label_restore_save = ttk.Label(tab_restore_save, text="Restore Save", font=("Arial", 16))
 tab_label_restore_save.pack(pady=10)
 ttk.Button(tab_restore_save, text="Restore Save", command=lambda: RESTORE_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_restore_save, image=logo)
+logo_label.pack(pady=10)
 
 # Export Save Tab
 tab_label_export_save = ttk.Label(tab_export_save, text="Export Save", font=("Arial", 16))
 tab_label_export_save.pack(pady=10)
 ttk.Button(tab_export_save, text="Export Save", command=lambda: EXPORT_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_export_save, image=logo)
+logo_label.pack(pady=10)
 
 # Import Save Tab
 tab_label_import_save = ttk.Label(tab_import_save, text="Import Save", font=("Arial", 16))
 tab_label_import_save.pack(pady=10)
 ttk.Button(tab_import_save, text="Import Save", command=lambda: IMPORT_SAVE()).pack(pady=10)
+logo_label = ttk.Label(tab_import_save, image=logo)
+logo_label.pack(pady=10)
+
+# About Tab
+tab_label_about = ttk.Label(tab_about, text="About", font=("Arial", 16))
+tab_label_about.pack(pady=10)
+version = ttk.Label(tab_about, text="Version: 1.0.0", font=("Arial", 12))
+version.pack(pady=10)
+link1 = Label(tab_about, text="Source Code", cursor="hand2", font=("Arial", 12), bg="#464646", fg="#a6a6a6")
+link1.pack()
+link1.bind("<Button-1>", lambda e: callback("https://github.com/LucasJoel1/BOTW-Save-Changer"))
 
 root.mainloop()
