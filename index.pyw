@@ -1,4 +1,5 @@
 from math import frexp
+from msilib.schema import Shortcut
 import os
 from select import select
 import shutil
@@ -15,13 +16,15 @@ from ttkthemes import ThemedTk
 from PIL import ImageTk, Image
 import ctypes
 import webbrowser
+import winshell
+import subprocess
 
-os.system('git pull')
+subprocess.run('git pull')
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 path = open('./config.save', 'r').readline()
-
+icon = os.path.abspath('./assets/logo.ico')
 root = ThemedTk(theme="equilux")
 root.title("BOTW Save Changer and Exporter for Cemu")
 root.iconbitmap('./assets/logo.ico')
@@ -37,6 +40,26 @@ def success_message(message):
 
 def callback(url):
     webbrowser.open_new(url)
+
+def CREATE_DESKTOP_SHORTCUT():
+    winshell.CreateShortcut(
+        Path=os.path.join(winshell.desktop(), 'BOTW Save Changer and Exporter for Cemu.lnk'),
+        Target=os.path.abspath('./index.pyw'),
+        Icon=(icon, 0),
+        Description='BOTW Save Changer and Exporter for Cemu',
+        StartIn=os.path.abspath('./')
+    )
+    success_message("Shortcut created")
+
+def ADD_TO_START_MENU():
+    winshell.CreateShortcut(
+        Path=os.path.join(winshell.start_menu(), 'BOTW Save Changer and Exporter for Cemu.lnk'),
+        Target=os.path.abspath('./index.pyw'),
+        Icon=(icon, 0),
+        Description='BOTW Save Changer and Exporter for Cemu',
+        StartIn=os.path.abspath('./')
+    )
+    success_message("Shortcut added to start menu")
 
 def CREATE_SAVE():
     save_name = askstring("Create Save", "Enter a name for the save")
@@ -191,6 +214,7 @@ tab_backup_save = ttk.Frame(tabControl)
 tab_restore_save = ttk.Frame(tabControl)
 tab_export_save = ttk.Frame(tabControl)
 tab_import_save = ttk.Frame(tabControl)
+tab_settings = ttk.Frame(tabControl)
 tab_about = ttk.Frame(tabControl)
 tabControl.add(tab_create_save, text="Create Save")
 tabControl.add(tab_load_save, text="Load Save")
@@ -201,6 +225,7 @@ tabControl.add(tab_backup_save, text="Backup Save")
 tabControl.add(tab_restore_save, text="Restore Save")
 tabControl.add(tab_export_save, text="Export Save")
 tabControl.add(tab_import_save, text="Import Save")
+tabControl.add(tab_settings, text="Settings")
 tabControl.add(tab_about, text="About")
 tabControl.pack(expand=1, fill="both")
 
@@ -267,6 +292,11 @@ tab_label_import_save.pack(pady=10)
 ttk.Button(tab_import_save, text="Import Save", command=lambda: IMPORT_SAVE()).pack(pady=10)
 logo_label = ttk.Label(tab_import_save, image=logo)
 logo_label.pack(pady=10)
+
+# Settings Tab
+ttk.Button(tab_settings, text="Create Desktop Shortcut", command=lambda: CREATE_DESKTOP_SHORTCUT()).pack(pady=10)
+ttk.Button(tab_settings, text="Create Start Menu Shortcut", command=lambda: ADD_TO_START_MENU()).pack(pady=10)
+
 
 # About Tab
 tab_label_about = ttk.Label(tab_about, text="About", font=("Arial", 16))

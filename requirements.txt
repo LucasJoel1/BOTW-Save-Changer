@@ -5,3 +5,6 @@ ttkthemes
 PIL
 ctypes
 webbrowser
+winshell
+pypiwin32
+subprocess
