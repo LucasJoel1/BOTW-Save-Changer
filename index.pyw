@@ -19,7 +19,7 @@ import webbrowser
 import winshell
 import subprocess
 
-subprocess.run('git pull')
+# get the git commit hash
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
@@ -31,6 +31,51 @@ root.iconbitmap('./assets/logo.ico')
 root.geometry("785x450")
 root.resizable(False, True)
 root.style = ttk.Style()
+
+def get_current_branch():
+    try:
+        branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], creationflags=0x08000000)
+        print(branch)
+        return str(branch[:].decode('ascii'))
+    except:
+        return b'unknown'
+
+def switch_branch_master():
+    check = messagebox.askokcancel("Switch Branch", "Are you sure you want to switch to the master branch?  This will also update the program to the latest version.")
+    if check == False:
+        messagebox.showinfo("Switch Branch", "Branch not switched")
+        return
+    subprocess.call("git checkout master", creationflags=0x08000000)
+    update()
+    success_message(f"Switched to master branch and updated (new hash: {get_git_hash()})\nSwitch Branch, The program will now restart.")
+    root.destroy()
+    subprocess.run('python index.pyw', creationflags=0x08000000)
+
+def switch_branch_dev():
+    check = messagebox.askokcancel("Switch Branch", "Are you sure you want to switch to the dev branch?  This will also update the program to the latest version.")
+    if check == False:
+        messagebox.showinfo("Switch Branch", "Branch not switched")
+        return
+    subprocess.call("git checkout dev", creationflags=0x08000000)
+    update()
+    success_message(f"Switched to master branch and updated (new hash: {get_git_hash()})\nSwitch Branch, The program will now restart.")
+    root.destroy()
+    subprocess.run('python index.pyw', creationflags=0x08000000)
+
+def update():
+    old_git_hash = get_git_hash()
+    subprocess.call("git pull", creationflags=0x08000000)
+    if get_git_hash() != old_git_hash:
+        success_message(f"Update successful (new hash: {get_git_hash()})")
+    else:
+        error_message("No update available")
+
+def get_git_hash():
+    try:
+        hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'], creationflags=0x08000000)
+        return hash[:7].decode('ascii')
+    except:
+        return b'unknown'
 
 def error_message(message):
     messagebox.showerror("Error", message)
@@ -296,13 +341,19 @@ logo_label.pack(pady=10)
 # Settings Tab
 ttk.Button(tab_settings, text="Create Desktop Shortcut", command=lambda: CREATE_DESKTOP_SHORTCUT()).pack(pady=10)
 ttk.Button(tab_settings, text="Create Start Menu Shortcut", command=lambda: ADD_TO_START_MENU()).pack(pady=10)
-
+ttk.Button(tab_settings, text="Update", command=lambda: update()).pack(pady=10)
+ttk.Button(tab_settings, text="Switch branch to master", command=lambda: switch_branch_master()).pack(pady=10)
+ttk.Button(tab_settings, text="Switch branch to dev", command=lambda: switch_branch_dev()).pack(pady=10)
 
 # About Tab
 tab_label_about = ttk.Label(tab_about, text="About", font=("Arial", 16))
-tab_label_about.pack(pady=10)
+tab_label_about.pack()
 version = ttk.Label(tab_about, text="Version: 1.0.0", font=("Arial", 12))
-version.pack(pady=10)
+version.pack()
+hash = ttk.Label(tab_about, text=f"Hash: {get_git_hash()}", font=("Arial", 12))
+hash.pack()
+branch = ttk.Label(tab_about, text=f"Branch: {get_current_branch()}", font=("Arial", 12))
+branch.pack()
 link1 = Label(tab_about, text="Source Code", cursor="hand2", font=("Arial", 12), bg="#464646", fg="#a6a6a6")
 link1.pack()
 link1.bind("<Button-1>", lambda e: callback("https://github.com/LucasJoel1/BOTW-Save-Changer"))
