@@ -21,8 +21,6 @@ import winshell
 import subprocess
 
 subprocess.call("pip install -r ./requirements.txt", creationflags=0x08000000)
-
-# get the git commit hash
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
