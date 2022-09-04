@@ -1,3 +1,4 @@
+from genericpath import isfile
 from math import frexp
 from msilib.schema import Shortcut
 import os
@@ -20,7 +21,27 @@ import webbrowser
 import winshell
 import subprocess
 
-subprocess.call("pip install -r ./requirements.txt", creationflags=0x08000000)
+def error_message(message):
+    messagebox.showerror("Error", message)
+
+def success_message(message):
+    messagebox.showinfo("Success", message)
+
+if not os.path.isfile('./config.save'):
+    beginSetup = messagebox.askokcancel("First Time Setup", "This is the first time you have run this program, please select your Cemu folder")
+    if beginSetup == False:
+        error_message("Setup cancelled")
+        exit()
+    cemu_folder = filedialog.askdirectory(initialdir='./')
+    f = open('./config.save', 'w')
+    f.write(cemu_folder)
+    f.close()
+    subprocess.call("pip install -r requirements.txt", creationflags=0x08000000)
+    os.mkdir('./saves')
+    os.mkdir('./backups')
+    success_message("Setup complete")
+    
+    
 myappid = 'codes.lucasjoel.BOTW Save Changer and Exporter for Cemu.1.0.0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
@@ -31,7 +52,6 @@ root.title("BOTW Save Changer and Exporter for Cemu")
 root.iconbitmap('./assets/logo.ico')
 root.geometry("841x450")
 root.resizable(False, True)
-root.style = ttk.Style()
 
 def get_current_branch():
     try:
@@ -77,12 +97,6 @@ def get_git_hash():
         return hash.decode('ascii')
     except:
         return b'unknown'
-
-def error_message(message):
-    messagebox.showerror("Error", message)
-
-def success_message(message):
-    messagebox.showinfo("Success", message)
 
 def callback(url):
     webbrowser.open_new(url)
@@ -248,7 +262,6 @@ if path == "" or not os.path.isdir(path):
     f.write(path)
     f.close()
 
-# check if there is a save.save file in the game save directory
 if not os.path.isfile(path + "\\mlc01\\usr\\save\\00050000\\101c9400\\user\\80000001\\save.save"):
     save_name = askstring("No save found in game directory", "Enter a name for the currently loaded save")
     f = open(path + "\\mlc01\\usr\\save\\00050000\\101c9400\\user\\80000001\\save.save", 'w')
